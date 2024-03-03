@@ -8,7 +8,8 @@ A Node.js package for multi-factor authentication using TOTP.
 npm install mfa-totp
 
 Usage
-const mfa = require('mfa-totp');
+//make sure to import it by correct path
+const mfa = require('mfa-totp/mfa')
 
 // Generate a secret
 const secret = mfa.generateSecret();
