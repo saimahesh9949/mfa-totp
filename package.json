@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/saimahesh9949/mfa-totp/issues"
   },
-  "homepage": "https://github.com/saimahesh9949/mfa-totp#readme"
+  "homepage": "https://github.com/saimahesh9949/mfa-totp#readme",
+  "dependencies": {
+    "speakeasy": "^2.0.0"
+  }
 }
