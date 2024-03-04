@@ -1,6 +1,6 @@
 {
   "name": "mfa-totp",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "homepage": "https://github.com/saimahesh9949/mfa-totp#readme",
   "dependencies": {
     "speakeasy": "^2.0.0"
+  },
+  "dependents": {
+    "my-dependent-package": "^1.0.0"
   }
 }
