@@ -1,15 +1,22 @@
 const mfa = require('./mfa');
 
-// Generate a secret
+// Generate a secret key
 const secret = mfa.generateSecret();
 
-// Display the secret and QR code (for scanning into an authenticator app)
-console.log('Secret:', secret.base32);
-console.log('QR Code:', secret.otpauth_url);
+console.log('Generated Secret:', secret.base32);
 
 // Generate a TOTP token
 const token = mfa.generateTOTP(secret);
 
+console.log('Generated Token:', token);
+
 // Verify the token
-const isValid = mfa.verifyTOTP(secret, token);
-console.log('Token is valid:', isValid);
+mfa.verifyTOTP(secret, token)
+    .then(isValid => {
+        console.log('Token is valid:', isValid);
+
+        // Make a GET request using the http module through the makeGetRequest function
+        return mfa.makeGetRequest('http://jsonplaceholder.typicode.com/posts/1');
+    })
+    .then(data => console.log('HTTP GET response:', data))
+    .catch(error => console.error('Error:', error));
