@@ -1,22 +1,29 @@
-const mfa = require('./mfa');
+const { generateSecret, generateTOTP, verifyTOTP, makeGetRequest } = require('./mfa');
 
-// Generate a secret key
-const secret = mfa.generateSecret();
+async function test() {
+    // Generate a secret
+    const secret = generateSecret();
 
-console.log('Generated Secret:', secret.base32);
+    console.log('Generated secret:', secret);
 
-// Generate a TOTP token
-const token = mfa.generateTOTP(secret);
+    // Generate a TOTP
+    const token = generateTOTP(secret);
 
-console.log('Generated Token:', token);
+    console.log('Generated token:', token);
 
-// Verify the token
-mfa.verifyTOTP(secret, token)
-    .then(isValid => {
-        console.log('Token is valid:', isValid);
+    // Verify the TOTP
+    const isValid = await verifyTOTP(secret, token);
 
-        // Make a GET request using the http module through the makeGetRequest function
-        return mfa.makeGetRequest('http://jsonplaceholder.typicode.com/posts/1');
-    })
-    .then(data => console.log('HTTP GET response:', data))
-    .catch(error => console.error('Error:', error));
+    console.log('Token verification result:', isValid);
+
+    // Make an HTTP GET request
+    const url = 'https://jsonplaceholder.typicode.com/posts/1';
+    try {
+        const response = await makeGetRequest(url);
+        console.log('HTTP GET request response:', response);
+    } catch (error) {
+        console.error('Error making HTTP GET request:', error);
+    }
+}
+
+test();

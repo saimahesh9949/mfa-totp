@@ -4,28 +4,43 @@ A Node.js package for multi-factor authentication using TOTP.
 
 ## Installation
 
+
 ```bash
 npm install mfa-totp
 
+
 ## Usage
-const mfa = require('mfa-totp');
 
-// Generate a secret key
-const secret = mfa.generateSecret();
-console.log('Generated Secret:', secret.base32);
+const { generateSecret, generateTOTP, verifyTOTP, makeGetRequest } = require('your-module-name');
 
-// Generate a TOTP token
-const token = mfa.generateTOTP(secret);
-console.log('Generated Token:', token);
+// Generate a secret
+const secret = generateSecret();
 
-// Verify the token
-mfa.verifyTOTP(secret, token)
-    .then(isValid => {
-        console.log('Token is valid:', isValid);
+// Generate a TOTP
+const token = generateTOTP(secret);
 
-        // Make a GET request using the http module through the makeGetRequest function
-        return mfa.makeGetRequest('http://jsonplaceholder.typicode.com/posts/1');
-    })
-    .then(data => console.log('HTTP GET response:', data))
-    .catch(error => console.error('Error:', error));
+// Verify the TOTP
+const isValid = await verifyTOTP(secret, token);
 
+// Make an HTTP GET request
+const url = 'https://jsonplaceholder.typicode.com/posts/1';
+try {
+    const response = await makeGetRequest(url);
+    console.log('HTTP GET request response:', response);
+} 
+catch (error) {
+    console.error('Error making HTTP GET request:', error);
+}
+
+API
+generateSecret()
+Generates a secret for use in TOTP generation.
+
+generateTOTP(secret)
+Generates a TOTP using the provided secret.
+
+verifyTOTP(secret, token)
+Verifies a TOTP token using the provided secret.
+
+makeGetRequest(url)
+Makes an HTTP GET request to the specified URL and returns a promise that resolves with the response data.

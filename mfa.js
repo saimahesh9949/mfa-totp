@@ -1,19 +1,29 @@
 const speakeasy = require('speakeasy');
-const http = require('http');
+const https = require('https');
 
 function generateSecret() {
-    return speakeasy.generateSecret({ length: 20 });
+    try {
+        return speakeasy.generateSecret({ length: 20 });
+    } catch (error) {
+        console.error('Error generating secret:', error);
+        throw error;
+    }
 }
 
 function generateTOTP(secret) {
-    if (!secret || !secret.base32) {
-        throw new Error('Invalid secret');
-    }
+    try {
+        if (!secret || !secret.base32) {
+            throw new Error('Invalid secret');
+        }
 
-    return speakeasy.totp({
-        secret: secret.base32,
-        encoding: 'base32',
-    });
+        return speakeasy.totp({
+            secret: secret.base32,
+            encoding: 'base32',
+        });
+    } catch (error) {
+        console.error('Error generating TOTP:', error);
+        throw error;
+    }
 }
 
 function verifyTOTP(secret, token) {
@@ -32,15 +42,15 @@ function verifyTOTP(secret, token) {
 
             resolve(isValid);
         } catch (error) {
+            console.error('Error verifying TOTP:', error);
             reject(error);
         }
     });
 }
 
-
 function makeGetRequest(url) {
     return new Promise((resolve, reject) => {
-        http.get(url, (response) => {
+        https.get(url, (response) => {
             let data = '';
 
             response.on('data', (chunk) => {
@@ -51,6 +61,7 @@ function makeGetRequest(url) {
                 resolve(JSON.parse(data));
             });
         }).on('error', (error) => {
+            console.error('Error making GET request:', error);
             reject(error);
         });
     });
